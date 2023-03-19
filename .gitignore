@@ -1,0 +1,6 @@
+target/
+dist/
+.idea/
+.DS_Store
+Cargo.lock
+*.zip

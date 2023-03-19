@@ -1,0 +1,72 @@
+[package]
+name = "bvtpl"
+version = "0.1.0"
+edition = "2021"
+authors = ["CHNYKN <chnykn@gmail.com>"]
+exclude = ["assets/", "dist", "crates/", "build"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.dev]
+opt-level = 1
+
+[profile.release]
+lto = true
+codegen-units = 1
+
+# The profile that 'cargo dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
+
+
+
+[features]
+dev = [
+	"bevy/bevy_dylib",
+]
+
+# Bevy defaults minus audio and some other not needed things
+# see https://github.com/bevyengine/bevy/blob/main/Cargo.toml#L31-L54
+default = [
+	"bevy/animation",
+	"bevy/bevy_asset",
+	"bevy/bevy_scene",
+	"bevy/bevy_winit",
+	"bevy/bevy_core_pipeline",
+	"bevy/bevy_pbr",
+	"bevy/bevy_gltf",
+	"bevy/bevy_render",
+	"bevy/bevy_sprite",
+	"bevy/bevy_text",
+	"bevy/bevy_ui",
+	"bevy/png",
+	"bevy/jpeg",
+	"bevy/hdr",
+	"bevy/zstd",
+	"bevy/ktx2",
+	"bevy/x11",
+#	"bevy/tonemapping_luts",
+#	"bevy/serialize",
+]
+
+[dependencies]
+rand = { version = "0.8.3" }
+anyhow = { version = "1" }
+serde = { version = "1", features = ["derive"] }
+
+bevy = { version = "0.10", default-features = false }
+bevy_asset_loader = { version = "0.15"}
+bevy_common_assets = { version = "0.6", features = ["toml"] } #features = ["ron", "toml"]
+
+
+# keep the following in sync with Bevy's dependencies
+winit = { version = "0.28", default-features = false }
+image = { version = "0.24", default-features = false }
+
+[build-dependencies]
+embed-resource = "1.4"
+
