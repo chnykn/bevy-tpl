@@ -16,36 +16,35 @@ mod player;
 
 #[derive(States, Default, Clone, Eq, PartialEq, Debug, Hash)]
 enum GameState {
-    /// During the loading State the LoadingPlugin will load our assets
-    #[default]
-    Loading,
-    /// During this State the actual game logic is executed
-    Playing,
-    /// Here the menu is drawn and waiting for player interaction
-    Menu,
+	/// During the loading State the LoadingPlugin will load our assets
+	#[default]
+	Loading,
+	/// During this State the actual game logic is executed
+	Playing,
+	/// Here the menu is drawn and waiting for player interaction
+	Menu,
 }
 
 
 pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
-    fn build(&self, app: &mut App) {
+	fn build(&self, app: &mut App) {
+		app.add_state::<GameState>()
+			.add_plugin(initial::InitialPlugin)
+			.add_plugin(loading::LoadingPlugin)
+			.add_plugin(menus::MenusPlugin)
+			.add_plugin(camera::CameraPlugin)
+			.add_plugin(player::PlayerPlugin)
+		;
 
-        app.add_state::<GameState>()
-            .add_plugin(initial::InitialPlugin)
-            .add_plugin(loading::LoadingPlugin)
-            .add_plugin(menus::MenusPlugin)
-            .add_plugin(camera::CameraPlugin)
-            .add_plugin(player::PlayerPlugin)
-        ;
+		// #[cfg(feature = "dev")]
+		// app.add_plugin(DevPlugin);
 
-        // #[cfg(feature = "dev")]
-        // app.add_plugin(DevPlugin);
-
-        // #[cfg(debug_assertions)]
-        // {
-        //     app.add_plugin(FrameTimeDiagnosticsPlugin::default())
-        //         .add_plugin(LogDiagnosticsPlugin::default());
-        // }
-    }
+		// #[cfg(debug_assertions)]
+		// {
+		//     app.add_plugin(FrameTimeDiagnosticsPlugin::default())
+		//         .add_plugin(LogDiagnosticsPlugin::default());
+		// }
+	}
 }

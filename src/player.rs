@@ -1,6 +1,4 @@
-
 use bevy::prelude::*;
-
 
 use crate::GameState;
 
@@ -12,7 +10,6 @@ impl Plugin for PlayerPlugin {
 	fn build(&self, app: &mut App) {
 		app.add_system(start_play.in_schedule(OnEnter(GameState::Playing)))
 		;
-
 	}
 }
 
@@ -49,5 +46,4 @@ fn start_play(
 		transform: Transform::from_xyz(6.0, 8.0, 6.0),
 		..default()
 	});
-
 }

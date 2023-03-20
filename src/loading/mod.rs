@@ -1,13 +1,14 @@
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
-
 use bevy_common_assets::toml::TomlAssetPlugin;
+
+use config::GameConfig;
+
+use crate::GameState;
+
 // use bevy_kira_audio::AudioSource;
 
 mod config;
-
-use crate::GameState;
-use config::GameConfig;
 
 //------------------------------------------------------------
 

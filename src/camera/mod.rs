@@ -1,9 +1,9 @@
 use bevy::prelude::*;
 
+use crate::GameState;
+
 mod ui;
 mod fly;
-
-use crate::GameState;
 
 pub struct CameraPlugin;
 
@@ -15,7 +15,7 @@ impl Plugin for CameraPlugin {
 			.add_system(ui::spawn_camera.on_startup())
 			.add_system(ui::despawn_camera.in_schedule(OnEnter(GameState::Playing)))
 			.add_system(setup_3d_camera.in_schedule(OnEnter(GameState::Playing)))
-			;
+		;
 	}
 }
 
@@ -26,8 +26,8 @@ fn setup_3d_camera(mut commands: Commands) {
 			transform: Transform::from_xyz(-2.0, 2.5, 5.0).looking_at(Vec3::ZERO, Vec3::Y),
 			..default()
 		},
-		fly::KeySetting{ ..default()},
-		fly::CameraState{ ..default()},
+		fly::KeySetting { ..default() },
+		fly::CameraState { ..default() },
 	));
 }
 
