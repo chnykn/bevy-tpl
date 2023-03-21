@@ -11,7 +11,7 @@ mod initial;
 mod loading;
 mod menus;
 mod camera;
-mod player;
+mod playing;
 
 
 #[derive(States, Default, Clone, Eq, PartialEq, Debug, Hash)]
@@ -35,7 +35,7 @@ impl Plugin for GamePlugin {
 			.add_plugin(loading::LoadingPlugin)
 			.add_plugin(menus::MenusPlugin)
 			.add_plugin(camera::CameraPlugin)
-			.add_plugin(player::PlayerPlugin)
+			.add_plugin(playing::PlayingPlugin)
 		;
 
 		// #[cfg(feature = "dev")]

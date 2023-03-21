@@ -2,13 +2,15 @@ use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
 use bevy_common_assets::toml::TomlAssetPlugin;
 
+pub mod config;
+
 use config::GameConfig;
 
 use crate::GameState;
 
 // use bevy_kira_audio::AudioSource;
 
-mod config;
+
 
 //------------------------------------------------------------
 
@@ -49,7 +51,7 @@ pub struct TextureAssets {
 #[derive(AssetCollection, Resource)]
 pub struct ConfigAssets {
 	#[asset(path = "config/game.toml")]
-	pub game: Handle<GameConfig>,
+	pub config: Handle<GameConfig>,
 }
 
 // #[derive(AssetCollection, Resource)]

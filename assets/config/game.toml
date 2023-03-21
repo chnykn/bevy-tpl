@@ -1,7 +1,9 @@
-[thing1]
-v1 = 8e-4
-v2 = 5e-4
+period = 0.02
 
-[thing1.fixed_angle]
-speed = 0.7
-pitch = -80.0
+[bounding]
+min_x = -5.0
+max_x = 5.0
+min_y = -3.0
+max_y = 3.0
+min_z = -3.0
+max_z = 3.0

@@ -6,6 +6,5 @@ use bevy::prelude::*;
 use bvtpl::GamePlugin;
 
 fn main() {
-	// println!("Hello, world!");
-	App::new().add_plugin(GamePlugin).run();
+    App::new().add_plugin(GamePlugin).run();
 }

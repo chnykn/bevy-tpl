@@ -9,7 +9,7 @@ use winit::window::Icon;
 
 use crate::util::pipe::log_errors;
 
-const BG_COLOR: Color = Color::rgb(0.1, 0.1, 0.2); //::BLACK;//
+const BG_COLOR: Color = Color::BLACK; //::rgb(0.1, 0.1, 0.2); //::BLACK;
 
 //--------------------------------------
 
