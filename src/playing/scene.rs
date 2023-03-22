@@ -1,5 +1,8 @@
+use std::f32::consts::PI;
+
 use bevy::{
 	prelude::*,
+	// pbr::{CascadeShadowConfigBuilder},
 };
 use rand::{Rng, thread_rng};
 
@@ -10,6 +13,9 @@ use crate::loading::FontAssets;
 use crate::playing::bound;
 
 const NUM_BODIES: usize = 100;
+
+#[derive(Debug, Component)]
+pub struct LightKind(pub usize);
 
 
 pub fn setup_scene(
@@ -72,7 +78,7 @@ pub fn setup_scene(
 	}
 
 
-//---text---
+	//---text---
 
 	commands
 		.spawn(TextBundle {
@@ -84,7 +90,7 @@ pub fn setup_scene(
 			text: Text {
 				sections: vec![
 					TextSection {
-						value: "Path between shooter and mouse cursor: ".to_string(),
+						value: "Some Information: ".to_string(),
 						style: TextStyle {
 							font: font_assets.fira_sans.clone(),
 							font_size: 20.0,
@@ -92,7 +98,7 @@ pub fn setup_scene(
 						},
 					},
 					TextSection {
-						value: "Direct!".to_string(),
+						value: "Some value".to_string(),
 						style: TextStyle {
 							font: font_assets.fira_sans.clone(),
 							font_size: 20.0,
@@ -107,55 +113,76 @@ pub fn setup_scene(
 // .insert(PathStatus);
 }
 
+pub fn switch_light(
+	keys: Res<Input<KeyCode>>,
+	mut query: Query<(&mut Visibility, &LightKind)>,
+) {
+	if keys.just_pressed(KeyCode::L) {
+		for (mut viz, _kind) in query.iter_mut() {
+			if *viz == Visibility::Visible {
+				*viz = Visibility::Hidden;
+			} else if *viz == Visibility::Hidden {
+				*viz = Visibility::Visible;
+			}
+		}
+	}
+}
+
 fn setup_light(commands: &mut Commands, bouding: &Bounding) {
 	let cen_x = (bouding.min_x + bouding.max_x) / 2.0;
 	let cen_y = (bouding.min_y + bouding.max_y) / 2.0;
 	let cen_z = (bouding.min_z + bouding.max_z) / 2.0;
 
 	// ambient light
-	commands.insert_resource(AmbientLight {
-		color: Color::WHITE,
-		brightness: 0.03,
-	});
+	// commands.insert_resource(AmbientLight {
+	// 	color: Color::WHITE,
+	// 	brightness: 0.03,
+	// });
 
 	// point light
-	commands.spawn(PointLightBundle {
-		transform: Transform::from_xyz(cen_x, cen_y, cen_z),
-		point_light: PointLight {
-			intensity: 2400.0,  //150w
-			color: Color::WHITE,
-			range: 100.0,
-			radius: 1.0,
-			// shadows_enabled: true,
+	commands.spawn((
+		PointLightBundle {
+			transform: Transform::from_xyz(cen_x, cen_y, bouding.max_z),
+			point_light: PointLight {
+				intensity: 2400.0,  //150w
+				color: Color::WHITE,
+				range: 100.0,
+				radius: 1.0,
+				// shadows_enabled: true,
+				..default()
+			},
+			visibility: Visibility::Visible,
 			..default()
 		},
-		..default()
-	});
+		LightKind(0)
+	));
 
 
 	// directional 'sun' light
-	/*
-	commands.spawn(DirectionalLightBundle {
-		directional_light: DirectionalLight {
-			shadows_enabled: true,
-			..default()
-		},
-		transform: Transform {
-			translation: Transform::from_xyz(cen_x, cen_y, cen_z),,
-			rotation: Quat::from_euler(EulerRot::XYZ, -PI / 4.0, PI / 4.0, 0.0),
 
+	commands.spawn((
+		DirectionalLightBundle {
+			directional_light: DirectionalLight {
+				shadows_enabled: false,
+				..default()
+			},
+			transform: Transform {
+				translation: Vec3::new(cen_x, cen_y, cen_z),
+				rotation: Quat::from_euler(EulerRot::XYZ, -PI / 4.0, PI / 4.0, 0.0),
+
+				..default()
+			},
+			// The default cascade config is designed to handle large scenes.
+			// As this example has a much smaller world, we can tighten the shadow bounds for better visual quality.
+			// cascade_shadow_config: CascadeShadowConfigBuilder {
+			// 	first_cascade_far_bound: 4.0,
+			// 	maximum_distance: 10.0,
+			// 	..default()
+			// }
+			// 	.into(),
+			visibility: Visibility::Hidden,
 			..default()
 		},
-		// The default cascade config is designed to handle large scenes.
-		// As this example has a much smaller world, we can tighten the shadow
-		// bounds for better visual quality.
-		cascade_shadow_config: CascadeShadowConfigBuilder {
-			first_cascade_far_bound: 4.0,
-			maximum_distance: 10.0,
-			..default()
-		}
-			.into(),
-		..default()
-	});
-	*/
+		LightKind(1)
+	));
 }
