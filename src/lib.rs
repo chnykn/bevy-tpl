@@ -7,22 +7,23 @@ use bevy::prelude::*;
 
 pub mod util;
 
-mod initial;
 mod loading;
 mod menus;
 mod camera;
-mod playing;
+mod scene;
 
 
-#[derive(States, Default, Clone, Eq, PartialEq, Debug, Hash)]
-enum GameState {
+#[derive(States, Default, Clone, Eq, PartialEq, Debug, Hash, SystemSet)]
+pub enum GameState {
 	/// During the loading State the LoadingPlugin will load our assets
 	#[default]
 	Loading,
-	/// During this State the actual game logic is executed
-	Playing,
+
 	/// Here the menu is drawn and waiting for player interaction
 	Menu,
+
+	/// During this State the actual game logic is executed
+	Playing,
 }
 
 
@@ -31,11 +32,10 @@ pub struct GamePlugin;
 impl Plugin for GamePlugin {
 	fn build(&self, app: &mut App) {
 		app.add_state::<GameState>()
-			.add_plugin(initial::InitialPlugin)
-			.add_plugin(loading::LoadingPlugin)
-			.add_plugin(menus::MenusPlugin)
-			.add_plugin(camera::CameraPlugin)
-			.add_plugin(playing::PlayingPlugin)
+			.add_plugins(loading::LoadingPlugin)
+			.add_plugins(menus::MenusPlugin)
+			.add_plugins(camera::CameraPlugin)
+			.add_plugins(scene::ScenePlugin)
 		;
 
 		// #[cfg(feature = "dev")]

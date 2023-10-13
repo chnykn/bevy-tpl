@@ -1,0 +1,9 @@
+period = 0.02
+
+[bounding]
+min_x = -5.0
+max_x = 5.0
+min_y = -3.0
+max_y = 3.0
+min_z = -3.0
+max_z = 3.0

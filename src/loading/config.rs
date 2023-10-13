@@ -1,8 +1,10 @@
+use std::fs::File;
+use std::io::prelude::*;
+
 use bevy::prelude::*;
-use bevy::reflect::TypeUuid;
 use serde::{Deserialize, Serialize};
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Resource)]
 pub struct Bounding {
 	pub min_x: f32,
 	pub min_y: f32,
@@ -15,9 +17,26 @@ pub struct Bounding {
 }
 
 
-#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize, Resource, TypeUuid)]
-#[uuid = "8a570b5a-f7df-1ae0-5d52-8bac408a1b70"]
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GameConfig {
 	pub period: f32,
 	pub bounding: Bounding,
+}
+
+pub fn load() -> GameConfig {
+	let file_path = "config.toml";
+	let mut file = match File::open(file_path) {
+		Ok(f) => f,
+		Err(e) => panic!("no such file {} exception:{}", file_path, e)
+	};
+	let mut str_val = String::new();
+	match file.read_to_string(&mut str_val) {
+		Ok(s) => s
+		,
+		Err(e) => panic!("Error Reading file: {}", e)
+	};
+
+	let result: GameConfig = toml::from_str(&str_val).unwrap();
+	result
 }

@@ -1,15 +1,9 @@
 use bevy::prelude::*;
 use bevy_asset_loader::prelude::*;
-use bevy_common_assets::toml::TomlAssetPlugin;
-
-pub mod config;
-
-use config::GameConfig;
 
 use crate::GameState;
 
-// use bevy_kira_audio::AudioSource;
-
+pub mod config;
 
 
 //------------------------------------------------------------
@@ -21,14 +15,20 @@ pub struct LoadingPlugin;
 // If interested, take a look at <https://bevy-cheatbook.github.io/features/assets.html>
 impl Plugin for LoadingPlugin {
 	fn build(&self, app: &mut App) {
-		app.add_plugin(TomlAssetPlugin::<GameConfig>::new(&["toml"]))
+		let cfg = config::load();
+
+		app
+			.insert_resource(cfg.bounding)
+
 			.add_loading_state(
-				LoadingState::new(GameState::Loading).continue_to_state(GameState::Menu),
+				LoadingState::new(GameState::Loading)
+					.continue_to_state(GameState::Menu),
 			)
+
 			.add_collection_to_loading_state::<_, FontAssets>(GameState::Loading)
 			.add_collection_to_loading_state::<_, TextureAssets>(GameState::Loading)
-			.add_collection_to_loading_state::<_, ConfigAssets>(GameState::Loading);
-		// .add_collection_to_loading_state::<_, AudioAssets>(GameState::Loading);
+		//  .add_collection_to_loading_state::<_, AudioAssets>(GameState::Loading)
+		;
 	}
 }
 
@@ -40,6 +40,9 @@ impl Plugin for LoadingPlugin {
 pub struct FontAssets {
 	#[asset(path = "fonts/FiraSans-Bold.ttf")]
 	pub fira_sans: Handle<Font>,
+
+	#[asset(path = "fonts/jsong.ttf")]
+	pub jsong: Handle<Font>,
 }
 
 #[derive(AssetCollection, Resource)]
@@ -48,11 +51,11 @@ pub struct TextureAssets {
 	pub texture_bevy: Handle<Image>,
 }
 
-#[derive(AssetCollection, Resource)]
-pub struct ConfigAssets {
-	#[asset(path = "config/game.toml")]
-	pub config: Handle<GameConfig>,
-}
+// #[derive(AssetCollection, Resource)]
+// pub struct ConfigAssets {
+// 	#[asset(path = "config/game.toml")]
+// 	pub config: Handle<GameConfig>,
+// }
 
 // #[derive(AssetCollection, Resource)]
 // pub struct AudioAssets {

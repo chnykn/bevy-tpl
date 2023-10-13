@@ -7,21 +7,22 @@ exclude = ["assets/", "dist", "crates/", "build"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[profile.dev.package."*"]
-opt-level = 3
-
 [profile.dev]
 opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
 
 [profile.release]
 lto = true
 codegen-units = 1
+opt-level = "z"
+panic = "abort"
 
 # The profile that 'cargo dist' will build with
 [profile.dist]
 inherits = "release"
 lto = "thin"
-
 
 
 [features]
@@ -30,10 +31,12 @@ dev = [
 ]
 
 # Bevy defaults minus audio and some other not needed things
-# see https://github.com/bevyengine/bevy/blob/main/Cargo.toml#L31-L54
+# see https://github.com/bevyengine/bevy/blob/main/Cargo.toml
 default = [
 	"bevy/animation",
 	"bevy/bevy_asset",
+#	"bevy/bevy_audio",
+#	"bevy/bevy_gilrs",
 	"bevy/bevy_scene",
 	"bevy/bevy_winit",
 	"bevy/bevy_core_pipeline",
@@ -43,30 +46,35 @@ default = [
 	"bevy/bevy_sprite",
 	"bevy/bevy_text",
 	"bevy/bevy_ui",
+#	"bevy/multi-threaded",
 	"bevy/png",
-	#"bevy/jpeg",
-	#"bevy/hdr",
-	#"bevy/zstd",
-	#"bevy/ktx2",
-	#"bevy/x11",
-	#"bevy/tonemapping_luts",
-	#"bevy/serialize",
+#	"bevy/hdr",
+	"bevy/ktx2",
+	"bevy/zstd",
+#	"bevy/vorbis",
+#	"bevy/x11",
+#	"bevy/filesystem_watcher",
+#	"bevy/bevy_gizmos",
+#	"bevy/android_shared_stdcxx",
+	"bevy/tonemapping_luts", #important!!!
+#	"bevy/default_font",
+#	"bevy/webgl2",
 ]
 
 [dependencies]
-rand = { version = "0.8.3" }
+rand = { version = "0.8" }
 anyhow = { version = "1" }
+toml = { version = "0.8" }
 serde = { version = "1", features = ["derive"] }
 
-bevy = { version = "0.10", default-features = false }
-bevy_asset_loader = { version = "0.15"}
-bevy_common_assets = { version = "0.6", features = ["toml"] } #features = ["ron", "toml"]
-smooth-bevy-cameras = { version = "0.8"}
+bevy = { version = "0.11", default-features = false } #
+bevy_asset_loader = { version = "0.17"}
+smooth-bevy-cameras = { version = "0.9"}
 
 # keep the following in sync with Bevy's dependencies
 winit = { version = "0.28", default-features = false }
 image = { version = "0.24", default-features = false }
 
 [build-dependencies]
-embed-resource = "1.4"
+embed-resource = "1.8"
 
