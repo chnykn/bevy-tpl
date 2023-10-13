@@ -5,7 +5,7 @@
 
 use bevy::prelude::*;
 
-pub mod util;
+pub mod utils;
 
 mod loading;
 mod menus;

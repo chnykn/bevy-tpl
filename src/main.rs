@@ -27,7 +27,6 @@ fn main() {
 		..default()
 	});
 
-
 	App::new()
 		.insert_resource(Msaa::Sample4) //Msaa::Off
 		.insert_resource(ClearColor(BG_COLOR))
